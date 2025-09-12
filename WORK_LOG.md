@@ -1,9 +1,9 @@
 Name: YOUR NAME HERE
 
-| Date    |  Time  |                                     Update |
-|:--------|:------:|-------------------------------------------:|
-| April 5 | 9-10pm | I tried to write abstract, efficient code. |
-|         |        |                                            |
+| Date    |     Time      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Update |
+|:--------|:-------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| April 5 |    9-10pm     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             I tried to write abstract, efficient code. |
+| Sep 11  | 9:00pm-9:20pm | I began by thinking about some potential ways to approach this problem. I started by coding the "base case" we discussed in class where highways cost more than hospitals so you can just put a hospital in each city. I then considered a way of approaching the problem as building all possible highways and then building the least number of hospitals necessary. Then, I could consider the trade off when I add a hospital vs remove a certain number of highways to decide if I continue breaking highways to build hospitals. |
 
 
 To add a new row to the table, click into a cell and then hit shift-enter.
