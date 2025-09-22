@@ -20,57 +20,66 @@ public class HighwaysAndHospitals
             return (long) n*hospitalCost;
         }
         // Array to represent all the cities and what weights they hold/cities that are roots of them
-        long[] arr = new long[n+1];
-        for(int i = 1; i < arr.length;i++)
+        long[] nodes = new long[n+1];
+        for(int i = 1; i < nodes.length;i++)
         {
             // Sets every city to have a weight of -1;
-            arr[i] = -1;
+            nodes[i] = -1;
         }
         // Runs the union function for every possible city connection
         for(int edge[] : cities) {
-            union(edge[0], edge[1], arr);
+            union(edge[0], edge[1], nodes);
         }
-        // Calculate the total cost
         long total = 0;
-        for(int i = 1; i < arr.length;i++)
+        long discComponents = 0;
+       // Counts the number of disconnected components/clusters
+        for(int i = 1; i < nodes.length; i++)
         {
-            if(arr[i] < 0)
+            if(nodes[i] < 0)
             {
-               long size = -arr[i];
-               total+= hospitalCost + (size - 1) * highwayCost;
+                discComponents++;
             }
         }
+        // Computes the total based on number of clusters
+        total = discComponents*hospitalCost + (nodes.length - discComponents - 1)*highwayCost;
         return total;
     }
-    static void union(int a, int b, long[] arr)
+    static void union(int rootA, int rootB, long[] arr)
     {
-        a = find(a, arr);
-        b = find(b, arr);
-        if(a != b)
+        // Finds the ultimate root for each city in a proposed connection
+        rootA = find(rootA, arr);
+        rootB = find(rootB, arr);
+        // Doesn't change array if the two cities have the same root
+        if(rootA != rootB)
         {
-            if(arr[a] > arr[b])
+            // Ensures rootA has a higher order
+            // Otherwise swaps them
+            if(arr[rootA] > arr[rootB])
             {
-                int temp = a;
-                a = b;
-                b = temp;
+                int temp = rootA;
+                rootA = rootB;
+                rootB = temp;
             }
-            arr[a] += arr[b];
-            arr[b] = a;
+            // Combines size of two chains
+            arr[rootA] += arr[rootB];
+            // Makes larger chain the root of smaller one
+            arr[rootB] = rootA;
         }
     }
     static int find(int x, long[] arr)
     {
         int root = x;
 
-        // Step 1: Find the root of x
+        // Finds the root of x
         while (arr[root] >= 0) {
             root = (int) arr[root];
         }
 
-        // Step 2: Path compression
+        // Path compression (follows up the chain)
         while (x != root) {
             int parent = (int) arr[x];
-            arr[x] = root; // make x point directly to root
+            // Make x point directly to root
+            arr[x] = root;
             x = parent;
         }
 
