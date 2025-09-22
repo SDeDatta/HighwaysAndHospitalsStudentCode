@@ -6,7 +6,7 @@ import java.util.*;
  * for Adventures in Algorithms
  * at Menlo School in Atherton, CA
  *
- * Completed by: [YOUR NAME HERE]
+ * Completed by: Surya De Datta
  *
  */
 
@@ -19,47 +19,63 @@ public class HighwaysAndHospitals {
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][])
     {
         // Base Case
-        List<List<Integer>> list = new ArrayList<>();
-        for(int [] city : cities)
+        if(highwayCost > hospitalCost)
         {
-            int num = city[0];
-            int num2 = city[1];
-            list.get(num).add(num2);
-            list.get(num2).add(num);
+            return n*hospitalCost;
         }
-        Stack<Integer> myStack = new Stack<Integer>();
-        boolean[] visited = new boolean[n+1];
-        int clusterCount = 0;
-        int current = 0;
-        for(int i = 1; i <= n; i++)
+        long[] arr = new long[n+1];
+        for(int i = 1; i < arr.length;i++)
         {
-            if(!visited[i])
+            arr[i] = -1;
+        }
+        for(int edge[] : cities) {
+            union(edge[0], edge[1], arr);
+        }
+        int discComponents = 0;
+        long total = 0;
+        for(int i = 1; i < arr.length;i++)
+        {
+            if(arr[i] < 0)
             {
-                myStack.push(0);
-                visited[1] = true;
-                while(!myStack.empty())
-                {
-                    current = myStack.pop();
-                    for(int neighbor : list.get(current))
-                    {
-                        if(!visited[neighbor])
-                        {
-                            visited[neighbor] = true;
-                            myStack.push(neighbor);
-                        }
-                    }
-                    clusterCount++;
-                }
+               long size = -arr[i];
+               total+= hospitalCost + (size - 1) * highwayCost;
             }
         }
-
-        // Adjacency matrix or use DFS to
-        // Figure out how many clusters (number of cities-1*highway cost)
-        // 1 hospital more worth than 2 highways if the highways simply connect one more city
-
-        // Try making it so you build all possible highways and see the minimum number of hospitals you need
-        // Then remove highways as long as it reduces cost
-        //
-        return 0;
+        return total;
     }
+    static void union(int a, int b, long[] arr)
+    {
+        a = find(a, arr);
+        b = find(b, arr);
+        if(a != b)
+        {
+            if(arr[a] > arr[b])
+            {
+                int temp = a;
+                a = b;
+                b = temp;
+            }
+            arr[a] += arr[b];
+            arr[b] = a;
+        }
+    }
+    static int find(int x, long[] arr)
+    {
+        int root = x;
+
+        // Step 1: Find the root of x
+        while (arr[root] >= 0) {
+            root = (int) arr[root];
+        }
+
+        // Step 2: Path compression
+        while (x != root) {
+            int parent = (int) arr[x];
+            arr[x] = root; // make x point directly to root
+            x = parent;
+        }
+
+        return root;
+    }
+
 }
